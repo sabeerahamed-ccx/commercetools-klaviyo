@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "build": "npm run clean && node ./build.js && copy package.json dist\\package.json && xcopy config dist\\config /E /I /Y",
-    "gcp-build": "npm run clean && ./build.js && cp package.json ./dist/package.json && cp -r ./config ./dist",
+    "gcp-build": "npm run clean && node ./build.js && copy package.json dist\\package.json && xcopy config dist\\config /E /I /Y",
     "clean": "if exist dist rmdir /S /Q dist",
     "klaviyo-types": "dts-gen -m klaviyo-api -f src/types/klaviyo-api.d.ts -o",
     "lint": "eslint \"src/**/*.ts\" --quiet",
