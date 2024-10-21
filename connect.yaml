@@ -1,0 +1,30 @@
+deployAs:
+  - name: plugin
+    applicationType: event
+    endpoint: /
+    scripts:
+      postDeploy: npm install && npm run build && npm run connector:post-deploy
+      preUndeploy: npm install && npm run build && npm run connector:pre-undeploy
+    configuration:
+      securedConfiguration:
+        - key: KLAVIYO_AUTH_KEY
+          description: Klaviyo API key for requests
+        - key: CT_API_CLIENT
+          description: JSON Object with CT API Client ID and Secret for requests
+      standardConfiguration:
+        - key: CT_API_URL
+          description: Commercetools API URL
+        - key: CT_AUTH_URL
+          description: Commercetools Auth URL
+        - key: CT_PROJECT_ID
+          description: Commercetools Project ID
+        - key: CT_SCOPES
+          description: Scopes for your Commercetools Client ID
+        - key: PRODUCT_URL_TEMPLATE
+          description: String to use as base for product URLs
+        - key: PREFERRED_LOCALE
+          description: Preferred locale to use when selecting some localized strings
+        - key: NODE_CONFIG
+          description: Provide a stringified and escaped JSON here to override all plugin configurations
+        - key: CONNECT_ENV
+          description: String from GitHub Actions or other source to identify environment (used in deploy/undeploy scripts, event adapter) 
