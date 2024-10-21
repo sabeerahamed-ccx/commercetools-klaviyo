@@ -71,6 +71,6 @@
   "resolutions": {
     "braces": "^3.0.3",
     "micromatch": "^4.0.8",
-    "yargs-parser": "5.0.1"
+    "yargs-parser": "^5.0.1"
   }
 }
