@@ -23,3 +23,6 @@ jobs:
 
       - name: Compile typescript
         run: yarn run build
+
+      - name: Audit
+        run: yarn audit
