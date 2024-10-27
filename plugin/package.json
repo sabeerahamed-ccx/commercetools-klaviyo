@@ -44,7 +44,7 @@
         "chai": "^4.3.7",
         "chai-http": "^4.3.0",
         "dts-gen": "^0.10.3",
-        "esbuild": "^0.17.15",
+        "esbuild": "^0.24.0",
         "eslint": "^8.37.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-prettier": "^4.2.1",
@@ -71,7 +71,6 @@
         "winston": "^3.8.2"
     },
     "resolutions": {
-        "path-to-regexp": "3.3.0",
-        "stdlib": "1.22.4"
+        "path-to-regexp": "^3.3.0"
     }
 }
