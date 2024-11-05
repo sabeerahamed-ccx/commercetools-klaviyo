@@ -24,6 +24,8 @@ deployAs:
           description: String to use as base for product URLs
         - key: PREFERRED_LOCALE
           description: Preferred locale to use when selecting some localized strings
+        - key: PREFERRED_CURRENCY
+          description: Preferred currency to use when selecting prices
         - key: NODE_CONFIG
           description: Provide a stringified and escaped JSON here to override all plugin configurations
         - key: CONNECT_ENV

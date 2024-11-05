@@ -22,11 +22,14 @@ export class DefaultProductMapper implements ProductMapper {
     constructor(private readonly currencyService: CurrencyService) {}
     public mapCtProductToKlaviyoItem(product: Product, update = false): ItemRequest {
         const productName = product.masterData.current.name;
+        const defaultProductName = getLocalizedStringAsText(productName);
         const productDescription = product.masterData.current.description;
+        const defaultProductDescription = productDescription ? getLocalizedStringAsText(productDescription) : '';
         const productSlug = product.masterData.current.slug;
         const defaultProductSlug = getLocalizedStringAsText(productSlug);
+        const productMasterVariantSku = product.masterData.current.masterVariant.sku as string;
         const productUrl = process.env.PRODUCT_URL_TEMPLATE
-            ? String(process.env.PRODUCT_URL_TEMPLATE).replace('{{productSlug}}', defaultProductSlug)
+            ? String(process.env.PRODUCT_URL_TEMPLATE).replace('{{productSlug}}', defaultProductSlug).replace('{{sku}}', productMasterVariantSku)
             : 'None';
         const productMasterVariantImages = product.masterData.current.masterVariant.images;
         const allProductCategories = product.masterData.current.categories.concat(
@@ -44,8 +47,8 @@ export class DefaultProductMapper implements ProductMapper {
                     integration_type: !update ? '$custom' : undefined,
                     catalog_type: !update ? '$default' : undefined,
                     external_id: !update ? product.id : undefined,
-                    title: getLocalizedStringAsText(productName),
-                    description: productDescription ? getLocalizedStringAsText(productDescription) : '',
+                    title: productName ? defaultProductName : '',
+                    description: productDescription ? defaultProductDescription : '',
                     url: productUrl,
                     image_full_url: productMasterVariantImages ? productMasterVariantImages[0]?.url : undefined,
                     price: productPrice ? this.currencyService.convert(productPrice.amount, productPrice.currency) : 0,
@@ -103,14 +106,18 @@ export class DefaultProductMapper implements ProductMapper {
         product: Product,
         productVariant: ProductVariant,
         update = false,
-    ): ItemVariantRequest {
+    ): ItemVariantRequest {        
         const productName = product.masterData.current.name;
+        const defaultProductName = getLocalizedStringAsText(productName);
         const productDescription = product.masterData.current.description;
+        const defaultProductDescription = productDescription ? getLocalizedStringAsText(productDescription) : '';
         const productSlug = product.masterData.current.slug;
         const defaultProductSlug = getLocalizedStringAsText(productSlug);
+        const productVariantSku = productVariant.sku as string;
         const productUrl = process.env.PRODUCT_URL_TEMPLATE
-            ? String(process.env.PRODUCT_URL_TEMPLATE).replace('{{productSlug}}', defaultProductSlug)
+            ? String(process.env.PRODUCT_URL_TEMPLATE).replace('{{productSlug}}', defaultProductSlug).replace('{{sku}}', productVariantSku)
             : 'None';
+
         const variantImages = productVariant.images;
         const variantPrice = productVariant.prices
             ? getProductPriceByPriority(productVariant.prices, getPreferredCurrencyFromEnv())
@@ -125,10 +132,10 @@ export class DefaultProductMapper implements ProductMapper {
                     integration_type: !update ? '$custom' : undefined,
                     catalog_type: !update ? '$default' : undefined,
                     external_id: !update ? productVariant.sku : undefined,
-                    title: getLocalizedStringAsText(productName),
-                    description: productDescription ? getLocalizedStringAsText(productDescription) : '',
-                    sku: !update ? productVariant.sku : undefined,
+                    title: productName ? defaultProductName : '',
+                    description: productDescription ? defaultProductDescription : '',
                     url: productUrl,
+                    sku: !update ? productVariant.sku : undefined,
                     image_full_url: variantImages?.[0]?.url,
                     inventory_quantity: variantInventoryQuantity ?? 0,
                     inventory_policy: 1,

@@ -14,9 +14,15 @@ export class DefaultCustomerMapper implements CustomerMapper {
             title,
             companyName: organization,
             id: external_id,
+            dateOfBirth,
             custom,
         } = customer;
-        const props = mapAllowedProperties('customer.customFields', { ...(custom?.fields || {}) });
+        const props = mapAllowedProperties('customer.customFields', {
+            ...(custom?.fields || {}),
+            ...(dateOfBirth ? { dateOfBirth } : [])
+        });
+
+        const phoneNumber = custom?.fields?.phoneNumber?.replace(/\s/g, "") ?? '';
 
         return {
             data: {
@@ -28,7 +34,7 @@ export class DefaultCustomerMapper implements CustomerMapper {
                     first_name,
                     last_name,
                     title,
-                    phone_number: address?.mobile || address?.phone,
+                    phone_number: phoneNumber || address?.mobile || address?.phone,
                     organization,
                     location: this.mapCTAddressToKlaviyoLocation(address),
                     properties: Object.keys(props).length ? { ...props } : undefined,
@@ -90,10 +96,10 @@ export class DefaultCustomerMapper implements CustomerMapper {
             return;
         }
         if (customer.defaultBillingAddressId) {
-            return customer.addresses?.find((address) => address.id === customer.defaultBillingAddressId);
+            return customer.addresses?.find((address) => address.id === customer.defaultShippingAddressId);
         }
         if (customer?.billingAddressIds?.length) {
-            return customer.addresses?.find((address) => address.id === customer?.billingAddressIds?.find(() => true));
+            return customer.addresses?.find((address) => address.id === customer?.shippingAddressIds?.find(() => true));
         }
         return customer.addresses?.find(() => true);
     }

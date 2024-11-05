@@ -15,7 +15,7 @@ if (process.env.JEST_WORKER_ID === undefined) {
 
 const bree = new Bree({
     root: path.join(__dirname, 'jobs'),
-    defaultExtension: process.env.TS_NODE || process.env.JEST_WORKER_ID ? 'ts' : 'js',
+    defaultExtension: 'ts',
     jobs: [
         {
             name: 'status',
@@ -161,20 +161,17 @@ bulkSyncApp.post('/sync/categories', async (req, res) => {
                 confirmDeletion = 'categories';
             }
         }
-        logger.info('1');
         await ctLockService.checkLock('categoryFullSync');
-        logger.info('2');
-        // await bree.add([
-        //     {
-        //         name: 'categoriesSync',
-        //         worker: {
-        //             workerData: {
-        //                 confirmDeletion,
-        //             },
-        //         },
-        //     },
-        // ]);
-        logger.info('3');
+        await bree.add([
+            {
+                name: 'categoriesSync',
+                worker: {
+                    workerData: {
+                        confirmDeletion,
+                    },
+                },
+            },
+        ]);
         await bree.run('categoriesSync');
         res.status(202).send();
     } catch (e: any) {

@@ -125,7 +125,8 @@ export class KlaviyoSdkService extends KlaviyoService {
                             } profile in Klaviyo after removing phone_number. Response code ${e.status}, ${e.message}`,
                             e,
                         );
-                        throw e;
+                        // throw e;
+                        return {}
                     }
                 }
             }
@@ -133,7 +134,8 @@ export class KlaviyoSdkService extends KlaviyoService {
                 `Error ${create ? 'creating' : 'updating'} profile in Klaviyo. Response code ${e.status}, ${e.message}`,
                 e,
             );
-            throw e;
+            return {};
+            // throw e;
         }
     }
 
